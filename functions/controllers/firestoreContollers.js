@@ -100,7 +100,9 @@ const get_all_user = (req, res) => {
     .get()
     .then(snapshot => {
       snapshot.forEach(doc => {
-        response.push(doc.data());
+        const id = doc.id
+        const data = doc.data()
+        response.push({ id, ...data });
       });
       return res.status(200).json({ response: response });
     })
