@@ -8,12 +8,6 @@ admin.initializeApp({
 // creates a firestore instance
 const db = admin.firestore();
 
-/**
- *
- * @param {*} req
- * @param {*} res
- * @function creates a new user
- */
 const create_user = (req, res) => {
   let users = db.collection("users");
   return users
@@ -26,12 +20,7 @@ const create_user = (req, res) => {
     });
 };
 
-/**
- *
- * @param {*} req
- * @param {*} res
- * @function gets user
- */
+
 const get_user = async (req, res) => {
   const userDocument = db.collection("users").doc(req.params.id);
   return userDocument
@@ -45,12 +34,7 @@ const get_user = async (req, res) => {
     });
 };
 
-/**
- *
- * @param {*} req
- * @param {*} res
- * @function deletes users
- */
+
 const delete_user = async (req, res) => {
   const userDocument = db.collection("users").doc(req.params.id);
   return userDocument
@@ -63,12 +47,6 @@ const delete_user = async (req, res) => {
     });
 };
 
-/**
- *
- * @param {*} req
- * @param {*} res
- * @function updates user data
- */
 const update_user = (req, res) => {
   const userDocument = db.collection("users").doc(req.params.id);
   return userDocument
@@ -86,14 +64,8 @@ const update_user = (req, res) => {
       return res.status(500).json({ error: error });
     });
 };
-
-/**
- *
- * @param {*} req
- * @param {*} res
- * @function gets all users
- */
 const get_all_user = (req, res) => {
+  console.log('get all')
   let users = db.collection("users");
   let response = [];
   return users
@@ -111,10 +83,31 @@ const get_all_user = (req, res) => {
     });
 };
 
+const get_intervalo = (req, res) => {
+  const userDocument = db.collection("users").where('DATA_BOLETO', '>=', req.query.inicio).where('DATA_BOLETO', '<=', req.query.final)
+  let response = [];
+  response.push(req.params)
+  return userDocument
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        const id = doc.id
+        const data = doc.data()
+        response.push({ id, ...data });
+      });
+      return res.status(200).json({ response: response });
+    })
+    .catch(error => {
+      return res.status(500).json({ error: error });
+    });
+};
+
+
 module.exports = {
   create_user,
   get_user,
   delete_user,
   update_user,
-  get_all_user
+  get_all_user,
+  get_intervalo
 };
