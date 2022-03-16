@@ -8,8 +8,8 @@ admin.initializeApp({
 // creates a firestore instance
 const db = admin.firestore();
 
-const create_user = (req, res) => {
-  let users = db.collection("users");
+const create_boleto = (req, res) => {
+  let users = db.collection("boletos");
   return users
     .add(req.body)
     .then(() => {
@@ -21,8 +21,8 @@ const create_user = (req, res) => {
 };
 
 
-const get_user = async (req, res) => {
-  const userDocument = db.collection("users").doc(req.params.id);
+const get_boleto = async (req, res) => {
+  const userDocument = db.collection("boletos").doc(req.params.id);
   return userDocument
     .get()
     .then(doc => {
@@ -35,8 +35,8 @@ const get_user = async (req, res) => {
 };
 
 
-const delete_user = async (req, res) => {
-  const userDocument = db.collection("users").doc(req.params.id);
+const delete_boleto = async (req, res) => {
+  const userDocument = db.collection("boletos").doc(req.params.id);
   return userDocument
     .delete()
     .then(() => {
@@ -47,8 +47,8 @@ const delete_user = async (req, res) => {
     });
 };
 
-const update_user = (req, res) => {
-  const userDocument = db.collection("users").doc(req.params.id);
+const update_boleto = (req, res) => {
+  const userDocument = db.collection("boletos").doc(req.params.id);
   return userDocument
     .update({
       email: req.body.email,
@@ -64,9 +64,9 @@ const update_user = (req, res) => {
       return res.status(500).json({ error: error });
     });
 };
-const get_all_user = (req, res) => {
+const get_all_boleto = (req, res) => {
   console.log('get all')
-  let users = db.collection("users");
+  let users = db.collection("boletos");
   let response = [];
   return users
     .get()
@@ -84,7 +84,7 @@ const get_all_user = (req, res) => {
 };
 
 const get_intervalo = (req, res) => {
-  const userDocument = db.collection("users").where('DATA_BOLETO', '>=', req.query.inicio).where('DATA_BOLETO', '<=', req.query.final)
+  const userDocument = db.collection("boletos").where('DATA_BOLETO', '>=', req.query.inicio).where('DATA_BOLETO', '<=', req.query.final)
   let response = [];
   response.push(req.params)
   return userDocument
@@ -104,10 +104,10 @@ const get_intervalo = (req, res) => {
 
 
 module.exports = {
-  create_user,
-  get_user,
-  delete_user,
-  update_user,
-  get_all_user,
+  create_boleto,
+  get_boleto,
+  delete_boleto,
+  update_boleto,
+  get_all_boleto,
   get_intervalo
 };
